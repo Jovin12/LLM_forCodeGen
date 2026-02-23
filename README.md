@@ -12,6 +12,7 @@ Then run, the command to start the streamlit agent:
 streamlit run ./main.py
 ```
 _________________
-<img width="1225" height="183" alt="image" src="https://github.com/user-attachments/assets/0096ada6-3ad2-47ac-ba65-b1e43014c184" />
-____________________________
+![PAI_code_assist_gif](https://github.com/user-attachments/assets/6d09c28d-5af0-487e-8b24-444f05202ce2)
+
+___________________________
 
