@@ -15,13 +15,19 @@ def load_model():
     tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 
-    pipe = pipeline("text-generation", model = model, tokenizer = tokenizer, max_new_tokens = 512)
+    pipe = pipeline(
+        "text-generation", 
+        model = model, 
+        tokenizer = tokenizer, 
+        max_new_tokens = 512,
+        return_full_text = False,
+    )
     llm = HuggingFacePipeline(pipeline = pipe)
     return llm
 
 
 
-def get_response(llm, prompt):
+def get_response(llm, messages, prompt):
 
     # THIS IS THE HUGGIN FACE PIPELINE PROMPTS
     # messages = [
@@ -30,15 +36,25 @@ def get_response(llm, prompt):
     # ]
 
     # LANGCHAIN prefered prompt inputs
+
+    messages = [("system","""You are to assume the name of P.A.I., a helpful programming assitant, 
+                  to assist with and help users with their programs and errors they may get with the programs,
+                 if you want to introduce yourself just say your name and that you are a model that uses Qwen as a base model,
+                  and say how you can assist the user,
+                 if the user specifies asking only the code do not provide any explanation, otherwise profive the explanation with the code""")]\
+    + messages + [("human",prompt)]
+
     template = ChatPromptTemplate.from_messages(
-        [
-            ("system","You are Qwen, a helpful programming assitant, to assist with and help users with their programs and errors they may get with the programs"),
-            ("human", "{prompt}")
-        ]
+        # [
+        #     ("system","You are Qwen, a helpful programming assitant, to assist with and help users with their programs and errors they may get with the programs"),
+        #     ("human", "{prompt}")
+        # ]
+        messages
     )
 
     # using langchain to chain together multiple steps
     # must be string parsed in order to get the output froma tensor to string
     llm_chain = template | llm | StrOutputParser()
     response = llm_chain.invoke({"prompt":prompt})
-    print(response)
+    # print(response)
+    return response
